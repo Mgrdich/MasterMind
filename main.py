@@ -7,12 +7,18 @@ class MasterMindBinary:
     _ONE_BIT = '1'
     _ZERO_AND_ONE = [_ZERO_BIT, _ONE_BIT]
 
-    def __init__(self, number=None, number_of_guesses=None, show_computer_guess=False):
+    def __init__(self, number=None, number_of_guesses=None, auto_play=False, show_computer_guess=False):
         self._guesses_feedbacks: List[Tuple[str, int]] = []  # tuple feedback guess
         self._computer_guess = None  # computer guess
         self._bits = number or 4
         self._number_of_guesses = number_of_guesses or 10
+        self._auto_play = auto_play
         self._show_computer_guess = show_computer_guess
+        self._auto_play_state = {
+            "first_move": False,
+            "guess_value": None,
+            "filtered_state": []  # feedback number state
+        }
 
     def play_game(self):
         print("Welcome to MasterMind")
@@ -23,11 +29,11 @@ class MasterMindBinary:
             print("Computer Guess {}".format(self._computer_guess))
 
         for i in range(self._number_of_guesses):
-            guess = self._get_user_guess()
+            guess = self.auto_play_guess() if self._auto_play else self._get_user_guess()
             self._guesses_feedbacks.append((guess, self._evaluate_guess(guess)))
 
             if self._get_feedback(-1) == self._bits:
-                print("Congrats you have guesses it")  # TODO maybe print array
+                print("Congrats you have guesses it")
                 return
 
             print("****************************************************************")
@@ -56,8 +62,12 @@ class MasterMindBinary:
     def _generate_random_computer_guess(self):
         self._computer_guess = ''.join([random.choice(MasterMindBinary._ZERO_AND_ONE) for i in range(self._bits)])
 
-    def classical_auto_play(self):
-        pass
+    def _generate_auto_play_all_state
+
+    def auto_play_guess(self) -> str:
+        if self._auto_play_state['first_move']:
+            self._auto_play_state['filtered_state'] = []  # TODO generate all the codes here
+            return
 
     def print_results(self):
         print("Computer Guess is {}".format(self._computer_guess))
