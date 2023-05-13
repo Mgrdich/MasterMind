@@ -7,17 +7,21 @@ class MasterMindBinary:
     _ONE_BIT = '1'
     _ZERO_AND_ONE = [_ZERO_BIT, _ONE_BIT]
 
-    def __init__(self, number=None, number_of_guesses=None):
+    def __init__(self, number=None, number_of_guesses=None, show_computer_guess=False):
         self._guesses_feedbacks: List[Tuple[str, int]] = []  # tuple feedback guess
         self._computer_guess = None  # computer guess
         self._bits = number or 4
         self._number_of_guesses = number_of_guesses or 10
+        self._show_computer_guess = show_computer_guess
 
     def play_game(self):
         print("Welcome to MasterMind")
         print("Guess the secret code in {} tries or fewer".format(self._number_of_guesses))
         self._generate_random_computer_guess()
-        print("Computer Guess {}".format(self._computer_guess))
+
+        if self._show_computer_guess:
+            print("Computer Guess {}".format(self._computer_guess))
+
         for i in range(self._number_of_guesses):
             guess = self._get_user_guess()
             self._guesses_feedbacks.append((guess, self._evaluate_guess(guess)))
@@ -25,6 +29,10 @@ class MasterMindBinary:
             if self._get_feedback(-1) == self._bits:
                 print("Congrats you have guesses it")  # TODO maybe print array
                 return
+
+            print("****************************************************************")
+            print("Your Past Guess and Feedbacks {}".format(self._guesses_feedbacks))
+            print("****************************************************************")
 
         print("Loser you have lost")
 
