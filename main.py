@@ -62,12 +62,13 @@ class MasterMindBinary:
     def _generate_random_computer_guess(self):
         self._computer_guess = ''.join([random.choice(MasterMindBinary._ZERO_AND_ONE) for i in range(self._bits)])
 
-    def _generate_auto_play_all_state
+    def _generate_auto_play_all_state(self):
+        pass # TODO
 
     def auto_play_guess(self) -> str:
         if self._auto_play_state['first_move']:
             self._auto_play_state['filtered_state'] = []  # TODO generate all the codes here
-            return
+            return ''
 
     def print_results(self):
         print("Computer Guess is {}".format(self._computer_guess))
