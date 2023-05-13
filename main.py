@@ -30,10 +30,10 @@ class MasterMindBinary:
 
     def _get_user_guess(self):
         guess = input("Enter your guess ({} digits): ".format(self._bits))
-        while len(guess) != self._computer_guess or not all(
+        while len(guess) != self._bits or not all(
                 char in MasterMindBinary._ZERO_AND_ONE for char in
-                self._get_guess(-1)):  # access the last element in the array
-            guess = input("Enter your guess ({} digits): ".format(self._bits))
+                guess):  # access the last element in the array
+            guess = input("Wrong!! Please Enter your guess ({} digits): ".format(self._bits))
         return guess
 
     def _evaluate_guess(self, code: str):
@@ -48,6 +48,9 @@ class MasterMindBinary:
     def _generate_random_computer_guess(self):
         self._computer_guess = ''.join([random.choice(MasterMindBinary._ZERO_AND_ONE) for i in range(self._bits)])
 
+    def classical_auto_play(self):
+        pass
+
     def print_results(self):
         print("Computer Guess is {}".format(self._computer_guess))
         print("Your Guess and Feedbacks {}".format(self._guesses_feedbacks))
@@ -56,3 +59,4 @@ class MasterMindBinary:
 if __name__ == "__main__":
     masterMind = MasterMindBinary()
     masterMind.play_game()
+    masterMind.print_results()
