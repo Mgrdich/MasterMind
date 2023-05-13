@@ -18,7 +18,7 @@ class MasterMindBinary:
         print("Guess the secret code in {} tries or fewer".format(self._bits))
         self._generate_random()
         for i in range(self._number_of_guesses):
-            guess = self.get_user_guess()
+            guess = self._get_user_guess()
             self._guesses_feedbacks.append((guess, self._evaluate_guess(guess)))
 
             if self._get_feedback(-1) == self._bits:
@@ -27,7 +27,7 @@ class MasterMindBinary:
 
         print("Loser you have lost")
 
-    def get_user_guess(self):
+    def _get_user_guess(self):
         guess = input("Enter your guess ({} digits): ".format(self._computer_guess))
         while len(guess) != self._computer_guess or not all(
                 char in MasterMindBinary._ZERO_AND_ONE for char in
@@ -46,3 +46,8 @@ class MasterMindBinary:
 
     def _generate_random(self):
         self._computer_guess = ''.join([random.choice(MasterMindBinary._ZERO_AND_ONE) for i in range(self._bits)])
+
+
+if __name__ == "__main__":
+    masterMind = MasterMindBinary()
+    masterMind.play_game()
