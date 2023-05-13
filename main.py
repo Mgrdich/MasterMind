@@ -1,4 +1,5 @@
 import random
+from typing import Tuple, List
 
 
 class MasterMindBinary:
@@ -6,27 +7,42 @@ class MasterMindBinary:
     _ONE_BIT = '1'
     _ZERO_AND_ONE = [_ZERO_BIT, _ONE_BIT]
 
-    def __int__(self, number):
-        self._guesses = []
-        self._computer_guess = ''
+    def __int__(self, number=4, number_of_guesses=10):
+        self._guesses_feedbacks: List[Tuple[str, number]] = []  # tuple feedback guess
+        self._computer_guess = None  # computer guess
         self._bits = 4
-        if number is not None:
-            self._bits = number
+        self._number_of_guesses = number_of_guesses
 
     def play_game(self):
         print("Welcome to MasterMind")
-        print("Guess the secret code in {} tries or fewer")
+        print("Guess the secret code in {} tries or fewer".format(self._bits))
+        self._generate_random()
+        for i in range(self._number_of_guesses):
+            guess = self.get_user_guess()
+            self._guesses_feedbacks.append((guess, self._evaluate_guess(guess)))
 
-    def get_guess(self, index):
+            if self._get_feedback(-1) == self._bits:
+                print("Congrats you have guesses it")  # TODO maybe print array
+                return
+
+        print("Loser you have lost")
+
+    def get_user_guess(self):
         guess = input("Enter your guess ({} digits): ".format(self._computer_guess))
         while len(guess) != self._computer_guess or not all(
-                char in MasterMindBinary._ZERO_AND_ONE for char in self._guesses[index]):
+                char in MasterMindBinary._ZERO_AND_ONE for char in
+                self._get_guess(-1)):  # access the last element in the array
             guess = input("Enter your guess ({} digits): ".format(self._computer_guess))
-        self._guesses.append(guess)
+        return guess
 
-    def evaluate_guess(self, code):
-        return sum(code[i] == self._computer_guess[i] for i in range(self._bits))
+    def _evaluate_guess(self, code: str):
+        return sum(int(code[i] == self._computer_guess[i]) for i in range(self._bits))
 
-    @staticmethod
-    def generate_random(digit_number=4):
-        return ''.join([random.choice(MasterMindBinary._ZERO_AND_ONE) for i in range(digit_number)])
+    def _get_guess(self, index):
+        return self._guesses_feedbacks[index][0]
+
+    def _get_feedback(self, index):
+        return self._guesses_feedbacks[index][1]
+
+    def _generate_random(self):
+        self._computer_guess = ''.join([random.choice(MasterMindBinary._ZERO_AND_ONE) for i in range(self._bits)])
