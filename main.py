@@ -15,7 +15,7 @@ class MasterMindBinary:
         self._auto_play = auto_play
         self._show_computer_guess = show_computer_guess
         self._auto_play_state = {
-            "first_move": False,
+            "first_move": True,
             "guess_value": None,
             "filtered_state": []  # feedback number state
         }
@@ -62,13 +62,26 @@ class MasterMindBinary:
     def _generate_random_computer_guess(self):
         self._computer_guess = ''.join([random.choice(MasterMindBinary._ZERO_AND_ONE) for i in range(self._bits)])
 
-    def _generate_auto_play_all_state(self):
-        pass # TODO
+    def _generate_auto_play_all_state(self, digit):
+        if digit == 0:
+            return [MasterMindBinary._ZERO_BIT]
+        if digit == 1:
+            return list(MasterMindBinary._ZERO_AND_ONE)  # reference protection
+
+        prev_numbers = self._generate_auto_play_all_state(digit - 1)
+        current_numbers = []
+        for number in prev_numbers:
+            current_numbers.append(number + MasterMindBinary._ZERO_BIT)
+            current_numbers.append(number + MasterMindBinary._ONE_BIT)
+
+        return current_numbers
 
     def auto_play_guess(self) -> str:
         if self._auto_play_state['first_move']:
-            self._auto_play_state['filtered_state'] = []  # TODO generate all the codes here
-            return ''
+            self._auto_play_state['filtered_state'] = self._generate_auto_play_all_state(
+                self._bits)
+            self._auto_play_state['first_move'] = False
+            self._auto_play_state['guess_value'] = '' # TODO random value here
 
     def print_results(self):
         print("Computer Guess is {}".format(self._computer_guess))
