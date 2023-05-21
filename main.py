@@ -14,10 +14,12 @@ class MasterMindBinary:
         self._number_of_guesses = number_of_guesses
         self._auto_play = auto_play
         self._show_computer_guess = show_computer_guess
+        self._all_bits_combination = []
         self._auto_play_state = {
             "first_move": True,
             "guess_value": None,  # TODO we can get rid of this
-            "filtered_state": []  # feedback number state
+            "filtered_state": [],  # feedback number state,
+            "history_of_filtered_state": []
         }
 
     def play_game(self):
@@ -93,6 +95,7 @@ class MasterMindBinary:
         if self._auto_play_state['first_move']:
             self._auto_play_state['filtered_state'] = self._generate_auto_play_all_state(
                 self._bits)
+            self._all_bits_combination = list(self._auto_play_state['filtered_state'])
             self._auto_play_state['first_move'] = False
             self._auto_play_state['guess_value'] = random.choice(self._auto_play_state['filtered_state'])
             return self._auto_play_state['guess_value']
@@ -100,6 +103,8 @@ class MasterMindBinary:
         # filtered states
         self._auto_play_state['filtered_state'] = list(
             filter(lambda x: self._filter_state_with_same_guess(x), self._auto_play_state['filtered_state']))
+
+        self._auto_play_state['history_of_filtered_state'].append(self._auto_play_state['filtered_state'])
 
         self._auto_play_state['guess_value'] = random.choice(self._auto_play_state['filtered_state'])
 
@@ -109,8 +114,13 @@ class MasterMindBinary:
         print("Computer Guess is {}".format(self._computer_guess))
         print("Your Guess and Feedbacks {}".format(self._guesses_feedbacks))
 
+    def get_results_of_iterations(self):  # TODO maybe check the reference thing return
+        return list(self._auto_play_state['history_of_filtered_state']), list(self._guesses_feedbacks), list(
+            self._all_bits_combination)
+
 
 if __name__ == "__main__":
     masterMind = MasterMindBinary(auto_play=True, show_computer_guess=True)
     masterMind.play_game()
     masterMind.print_results()
+    print(masterMind.get_results_of_iterations())

@@ -33,3 +33,5 @@ In the future you will be able to toggle those parameters with the shell flags
 
 but steps by step algorithm has logs , it will be configurable in the future.
 
+In the data_representation file is the basic plots of the algorithms
+
