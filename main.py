@@ -7,10 +7,10 @@ class MasterMindBinary:
     _ONE_BIT = '1'
     _ZERO_AND_ONE = [_ZERO_BIT, _ONE_BIT]
 
-    def __init__(self, number=4, number_of_guesses=10, auto_play=False, show_computer_guess=False):
+    def __init__(self, bits=4, number_of_guesses=10, auto_play=False, show_computer_guess=False):
         self._guesses_feedbacks: List[Tuple[str, int]] = []  # tuple feedback guess
         self._computer_guess = None  # computer guess
-        self._bits = number
+        self._bits = bits
         self._number_of_guesses = number_of_guesses
         self._auto_play = auto_play
         self._show_computer_guess = show_computer_guess
@@ -111,6 +111,6 @@ class MasterMindBinary:
 
 
 if __name__ == "__main__":
-    masterMind = MasterMindBinary()
+    masterMind = MasterMindBinary(auto_play=True, show_computer_guess=True)
     masterMind.play_game()
     masterMind.print_results()
